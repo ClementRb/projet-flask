@@ -10,6 +10,7 @@ from flask import redirect
 from flask import url_for
 from flask import redirect
 from flask import abort
+from flask import escape
 from hashlib import md5
 
 import os
@@ -59,14 +60,16 @@ def delete_card (id) :
 	db = get_db()
 	db.execute('delete from cards where id = '+id)
 	g.mysql_connection.commit()
-	return redirect('monitoring')
+	return redirect('gerer')
 
 @app.route('/add/')
 def add () : 
-	if not session.get('logged_in'):
-		return render_template('login.html')
+	if 'username' in session:
+		unsername_session = escape(session['username']).capitalize()
+		return render_template('ajout.html')
 	else:
-		return render_template(ajout.html)
+		return render_template('login.html')
+		
 
 @app.route('/ajout/', methods=['GET', 'POST'])
 def ajout_site () :
@@ -74,9 +77,9 @@ def ajout_site () :
 		unsername_session = escape(session['username']).capitalize()
 		Website = request.form.get('urlsite')
 		db = get_db()
-		db.execute('insert into cards(website) values(%s)', (Website))
+		db.execute('insert into cards(website) values(%s)', (Website,))
 		g.mysql_connection.commit()
-		return redirect ('monitoring')
+		return redirect ('add')
 	else: 
 		return redirect('login')
 
@@ -105,7 +108,7 @@ def login():
         if db.fetchone()[0]:
             db.execute("SELECT pass FROM users WHERE name = %s;", [username_form]) # FETCH THE HASHED PASSWORD
             for row in db.fetchall():
-                if md5(password_form).hexdigest() == row[0]:
+                if password_form == row[0]:
                     session['username'] = request.form['username']
                     return redirect(url_for('index'))
                 else:

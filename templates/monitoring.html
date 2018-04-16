@@ -18,26 +18,28 @@
        <li class="nav-item"> <a class="btn btn-success " href="/add/">Ajouter un site</a> </li>
     </ul>
     </nav>
-    <section class="container body-container">
+   <section class="container body-container">
       <h1 class="text-center">Liste des sites</h1>
       <div class="row mx-auto"> 
-      {% for card in cards %}
-       <div class="row websites-container text-center">
-        <div class="card ">
-          <div class="card-header website card-title">
-            <h4>
+
+      <table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Nom du site</th>
+      <th scope="col">Status du site</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for card in cards %}
+    <tr>
+      <td>  <h4>
               <a href="{{ card[1] }}">{{ card[1] }}</a>
-            </h4>
-          </div>
-          <div class="card-body">
-            <div class="website-card-code">HTTP : 200</div>
-            <div class="webiste-card-icon">
-              <span class="ion-flash"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
+            </h4></td>
+      <td><h4></h4></td>
+    </tr>
+     {% endfor %}
+  </tbody>
+</table>
    </div>
     </section>
 
